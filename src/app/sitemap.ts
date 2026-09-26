@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { locales, pages } from "@/lib/content";
 
+export const dynamic = "force-static";
+
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://dopixa.example";
 
 export default function sitemap(): MetadataRoute.Sitemap {

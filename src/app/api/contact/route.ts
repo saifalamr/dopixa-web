@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { checkContactRateLimit } from "@/lib/contact-rate-limit";
 
 export const runtime = "nodejs";
 
@@ -45,6 +46,11 @@ async function readBoundedJson(request: Request): Promise<unknown> {
 }
 
 export async function POST(request: Request) {
+  const rateLimit = checkContactRateLimit(request);
+  if (!rateLimit.allowed) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429, headers: { "Retry-After": String(rateLimit.retryAfter) } });
+  }
+
   const origin = request.headers.get("origin");
   const host = request.headers.get("x-forwarded-host") ?? request.headers.get("host");
   if (origin) {
@@ -63,6 +69,7 @@ export async function POST(request: Request) {
   let body: unknown;
   try { body = await readBoundedJson(request); } catch { return NextResponse.json({ error: "Invalid request" }, { status: 400 }); }
   if (!isRecord(body)) return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+  if (typeof body.website === "string" && body.website.trim()) return NextResponse.json({ ok: true }, { status: 200 });
 
   const fields: Record<string, string> = {};
   for (const [key, limit] of Object.entries(limits)) {

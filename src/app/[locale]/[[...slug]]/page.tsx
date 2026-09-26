@@ -29,12 +29,15 @@ export async function generateMetadata({ params }: { params: Promise<RouteParams
   const path = `/${locale}${slug?.length ? `/${slug.join("/")}` : ""}`;
   const other: Locale = locale === "tr" ? "ar" : "tr";
   const otherPath = `/${other}${slug?.length ? `/${slug.join("/")}` : ""}`;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  const socialImage = siteUrl ? new URL(`/${locale}/social-image`, siteUrl) : undefined;
+  const socialAlt = locale === "tr" ? "Dopixa marka simgesi ve adı" : "رمز Dopixa واسم العلامة التجارية";
   return {
     title,
     description,
-    alternates: { canonical: path, languages: { tr: `/${locale === "tr" ? path : otherPath}`, ar: `/${locale === "ar" ? path : otherPath}`, "x-default": `/tr${slug?.length ? `/${slug.join("/")}` : ""}` } },
-    openGraph: { title: `${title} | Dopixa`, description, locale: locale === "tr" ? "tr_TR" : "ar_AR", alternateLocale: locale === "tr" ? ["ar_AR"] : ["tr_TR"] },
-    twitter: { title: `${title} | Dopixa`, description },
+    ...(siteUrl ? { alternates: { canonical: new URL(path, siteUrl), languages: { tr: new URL(locale === "tr" ? path : otherPath, siteUrl), ar: new URL(locale === "ar" ? path : otherPath, siteUrl), "x-default": new URL(`/tr${slug?.length ? `/${slug.join("/")}` : ""}`, siteUrl) } } } : {}),
+    openGraph: { title: `${title} | Dopixa`, description, locale: locale === "tr" ? "tr_TR" : "ar_AR", alternateLocale: locale === "tr" ? ["ar_AR"] : ["tr_TR"], ...(siteUrl ? { url: new URL(path, siteUrl), images: [{ url: socialImage!, width: 1200, height: 630, alt: socialAlt }] } : {}) },
+    twitter: { card: socialImage ? "summary_large_image" : "summary", title: `${title} | Dopixa`, description, ...(socialImage ? { images: [{ url: socialImage, alt: socialAlt }] } : {}) },
   };
 }
 

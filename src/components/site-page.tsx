@@ -22,7 +22,7 @@ function WorkCards({ locale }: { locale: Locale }) {
   const items = getCaseStudies(locale);
   return <div className="work-grid">{items.map((item, index) => <article className={`work-card work-card-${index + 1}`} key={item.slug}>
     <div className="work-art" aria-hidden="true"><div className="art-window"><div className="art-window-top"><i /><i /><i /></div><div className="art-window-body"><span /><span /><span /><span /></div></div><div className="art-accent" /></div>
-    <div className="work-card-copy"><div className="work-meta"><span>{item.sector}</span><span className="status-badge"><i aria-hidden="true" />{item.statusLabel}</span></div><h3>{item.client}</h3><p>{item.summary}</p><span className="work-next-note">{locale === "tr" ? "Vaka çalışması doğrulama sonrası yayımlanacak" : "ستُنشر دراسة الحالة بعد التحقق"}</span></div>
+    <div className="work-card-copy"><div className="work-meta"><span>{item.sector}</span><span className="status-badge"><i aria-hidden="true" />{item.statusLabel}</span></div><h3 lang={locale === "ar" ? "tr" : undefined}>{item.client}</h3><p>{item.summary}</p><span className="work-next-note">{locale === "tr" ? "Vaka çalışması doğrulama sonrası yayımlanacak" : "ستُنشر دراسة الحالة بعد التحقق"}</span></div>
   </article>)}</div>;
 }
 

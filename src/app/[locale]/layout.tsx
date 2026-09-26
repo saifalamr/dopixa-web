@@ -10,7 +10,7 @@ const body = Inter({ subsets: ["latin", "latin-ext"], variable: "--font-body", d
 const arabic = Noto_Sans_Arabic({ subsets: ["arabic", "latin", "latin-ext"], variable: "--font-arabic", display: "swap" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://dopixa.example"),
+  ...(process.env.NEXT_PUBLIC_SITE_URL ? { metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL) } : {}),
   title: { default: "Dopixa — Custom software for modern business operations", template: "%s | Dopixa" },
   description: "Custom business systems, hospitality technology, websites and digital platforms for modern businesses.",
   applicationName: "Dopixa",

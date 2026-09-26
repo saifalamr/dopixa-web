@@ -12,13 +12,15 @@ Warm, modern, premium, and approachable. Generous space, quiet editorial hierarc
 | `--surface` | `#FFFFFF` | Cards and content surfaces |
 | `--surface-soft` | `#F4F0E9` | Soft backgrounds |
 | `--foreground` | `#13201C` | Main text |
-| `--muted` | `#66736D` | Supporting text |
+| `--muted` | `#505D57` | Supporting text with AA contrast on cream, white, and sage surfaces |
 | `--border` | `#E6E1DA` | Dividers and outlines |
 | `--primary` | `#0F3D32` | Brand anchor and primary actions |
 | `--primary-hover` | `#174F41` | Primary action hover |
 | `--secondary` | `#2E7D61` | Supporting emphasis |
+| `--secondary-strong` | `#235F4A` | Small text labels and hover emphasis |
 | `--sage` | `#B7C9BE` | Soft green accents |
-| `--accent` | `#FF7F5E` | Small warm highlights and focus |
+| `--accent` | `#FF7F5E` | Small warm highlights and the primary logo accent |
+| `--accent-strong` | `#A9442C` | Accessible emphasis and focus against light surfaces |
 | `--success` / `--warning` / `--danger` | semantic | Status and feedback |
 
 Text and interactive controls use semantic roles rather than literal palette values wherever practical. Check contrast for every final color/background pairing before release.

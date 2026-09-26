@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { MobileMenu } from "@/components/mobile-menu";
+import { BrandMark } from "@/components/brand-mark";
 import { getCopy, type Locale, type PageKey } from "@/lib/content";
 
 const pathFor: Record<PageKey, string> = {
   solutions: "solutions", work: "work", process: "process", about: "about", contact: "contact",
 };
 
-function Brand({ locale }: { locale: Locale }) {
-  return <Link className="brand" href={`/${locale}`} aria-label={locale === "tr" ? "Dopixa ana sayfa" : "Dopixa — الصفحة الرئيسية"}><span className="brand-mark" aria-hidden="true"><i /><i /><i /></span><span>Dopixa</span></Link>;
+function Brand({ locale, inverse = false }: { locale: Locale; inverse?: boolean }) {
+  return <Link className="brand" href={`/${locale}`} aria-label={locale === "tr" ? "Dopixa ana sayfa" : "Dopixa — الصفحة الرئيسية"}><BrandMark className="brand-mark" inverse={inverse} /><span>Dopixa</span></Link>;
 }
 
 export function SiteHeader({ locale, currentPage }: { locale: Locale; currentPage?: PageKey }) {
@@ -32,7 +33,7 @@ export function SiteHeader({ locale, currentPage }: { locale: Locale; currentPag
 export function SiteFooter({ locale }: { locale: Locale }) {
   const copy = getCopy(locale);
   return <footer className="site-footer"><div className="container footer-main">
-    <div className="footer-brand"><Brand locale={locale} /><p>{copy.footer.line}</p></div>
+    <div className="footer-brand"><Brand locale={locale} inverse /><p>{copy.footer.line}</p></div>
     <div className="footer-links"><span className="eyebrow">{locale === "tr" ? "Keşfedin" : "استكشف"}</span>{(Object.keys(pathFor) as PageKey[]).map((key) => <Link key={key} href={`/${locale}/${pathFor[key]}`}>{copy.nav[key]}</Link>)}</div>
     <div className="footer-note"><span className="eyebrow">{locale === "tr" ? "Pazarlarımız" : "أسواقنا"}</span><p>{copy.footer.location}</p></div>
     <div className="footer-contact"><span className="eyebrow">{locale === "tr" ? "Bir fikriniz mi var?" : "لديك فكرة؟"}</span><Link href={`/${locale}/contact`}>{copy.cta.project}<span aria-hidden="true">↗</span></Link></div>

@@ -57,6 +57,7 @@ export function ContactForm({ locale }: { locale: Locale }) {
   }
 
   return <form className="contact-form" onSubmit={submit} noValidate>
+    <label className="contact-honeypot" aria-hidden="true">Website<input name="website" tabIndex={-1} autoComplete="off" /></label>
     <div className="form-grid">
       {input("name", copy.fields.name)}{input("company", copy.fields.company, false)}
       {select("businessType", copy.fields.businessType, copy.options.business)}{input("country", copy.fields.country)}

@@ -6,7 +6,7 @@ import { getCopy, isLocale, locales, pageDescriptions, pages, type Locale, type 
 type RouteParams = { locale: string; slug?: string[] };
 
 export function generateStaticParams() {
-  return locales.flatMap((locale) => [{ locale }, ...pages.map((page) => ({ locale, slug: [page] }))]);
+  return locales.flatMap((locale) => [{ locale, slug: [] }, ...pages.map((page) => ({ locale, slug: [page] }))]);
 }
 
 function pageFromSlug(slug?: string[]): PageKey | undefined {

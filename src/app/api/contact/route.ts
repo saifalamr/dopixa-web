@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { checkContactRateLimit } from "@/lib/contact-rate-limit";
 
 export const runtime = "nodejs";
+const contactRecipient = "saifalomari244@gmail.com";
 
 const limits: Record<string, number> = {
   name: 120, company: 120, businessType: 80, country: 100, email: 254, phone: 80,
@@ -89,7 +90,7 @@ export async function POST(request: Request) {
     const upstream = await fetch(webhook, {
       method: "POST",
       headers: { "content-type": "application/json", authorization: `Bearer ${secret}` },
-      body: JSON.stringify(fields),
+      body: JSON.stringify({ ...fields, recipientEmail: contactRecipient }),
       cache: "no-store",
       signal: AbortSignal.timeout(8000),
     });

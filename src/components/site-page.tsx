@@ -93,7 +93,24 @@ function About({ locale }: { locale: Locale }) {
   return <><PageHero locale={locale} eyebrow={copy.about.eyebrow} title={copy.about.title} intro={copy.about.intro} /><section className="section about-section"><div className="container about-layout"><div className="about-statement"><span className="about-spark" aria-hidden="true">✳</span><p>{locale === "tr" ? "Dijital sistemler" : "الأنظمة الرقمية"}<br /><strong>{locale === "tr" ? "işe yaramak için" : "لتؤدي دورها"}<br />{locale === "tr" ? "işe uyum sağlamalı." : "يجب أن تناسب العمل."}</strong></p></div><div className="about-story"><p>{copy.about.body}</p><p>{locale === "tr" ? "Türkiye ve Arapça konuşulan pazarlardaki işletmelerle; anlaşılır, erişilebilir ve uzun vadede geliştirilebilir sistemler üzerine çalışıyoruz." : "نعمل مع الشركات في تركيا والأسواق الناطقة بالعربية لبناء أنظمة واضحة ويمكن الوصول إليها وقابلة للتطوير على المدى الطويل."}</p></div></div><div className="container principles-grid">{copy.about.principles.map((principle, index) => <article key={principle.title}><span>0{index + 1}</span><h2>{principle.title}</h2><p>{principle.text}</p></article>)}</div></section><CTA locale={locale} title={locale === "tr" ? "İşiniz için nelerin mümkün olduğunu konuşalım." : "لنتحدث عمّا يمكن تحقيقه لعملك."} text={copy.home.finalText} /></>;
 }
 
+function ContactOptions({ locale }: { locale: Locale }) {
+  const contact = getCopy(locale).contact;
+  const message = encodeURIComponent(contact.whatsappMessage);
+  const whatsappUrl = `https://wa.me/905315822748?text=${message}`;
+
+  return <div className="contact-actions">
+    <a className="button button-primary contact-whatsapp" href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M20 11.7a8 8 0 0 1-11.9 7L4 20l1.3-3.9a8 8 0 1 1 14.7-4.4Z" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/><path d="M9 8.5c.2-.4.4-.4.7-.4h.4c.2 0 .3.1.4.4l.7 1.6c.1.2.1.4-.1.6l-.5.6c-.2.2-.2.4 0 .7.5.8 1.2 1.4 2 1.9.2.1.4.1.6-.1l.7-.8c.2-.2.4-.2.6-.1l1.5.7c.2.1.3.2.3.4 0 .3-.1.8-.5 1.1-.4.4-1 .6-1.6.5-1-.1-2.2-.7-3.4-1.7-1.4-1.2-2.3-2.7-2.5-3.8-.2-.7.1-1.3.7-1.6Z" fill="currentColor"/></svg>
+      <span>{contact.whatsappAction}</span><span aria-hidden="true">↗</span>
+    </a>
+    <div className="contact-methods">
+      <a href={`mailto:${contact.emailAddress}`}><span>{contact.emailLabel}</span><bdi dir="ltr">{contact.emailAddress}</bdi></a>
+      <a href="tel:+905315822748"><span>{contact.phoneLabel}</span><bdi dir="ltr">{contact.phoneNumber}</bdi></a>
+    </div>
+  </div>;
+}
+
 function Contact({ locale }: { locale: Locale }) {
   const copy = getCopy(locale);
-  return <><PageHero locale={locale} eyebrow={copy.contact.eyebrow} title={copy.contact.title} intro={copy.contact.intro} /><section className="section contact-section"><div className="container contact-layout"><div className="contact-aside"><span className="contact-aside-mark" aria-hidden="true">✳</span><h2>{locale === "tr" ? "İyi bir çözüm, doğru soruyla başlar." : "الحل الجيد يبدأ بالسؤال الصحيح."}</h2><p>{copy.pageIntros.contact}</p><div className="contact-languages"><span className="eyebrow">{locale === "tr" ? "İletişim dilleri" : "لغات التواصل"}</span><div><span>Türkçe</span><span>العربية</span></div></div><p className="contact-privacy-note">{copy.contact.privacy}</p></div><div className="contact-form-wrap"><ContactForm locale={locale} /></div></div></section></>;
+  return <><PageHero locale={locale} eyebrow={copy.contact.eyebrow} title={copy.contact.title} intro={copy.contact.intro} /><section className="section contact-section"><div className="container contact-layout"><div className="contact-aside"><span className="contact-aside-mark" aria-hidden="true">✳</span><h2>{locale === "tr" ? "İyi bir çözüm, doğru soruyla başlar." : "الحل الجيد يبدأ بالسؤال الصحيح."}</h2><p>{copy.pageIntros.contact}</p><ContactOptions locale={locale} /><div className="contact-languages"><span className="eyebrow">{locale === "tr" ? "İletişim dilleri" : "لغات التواصل"}</span><div><span>Türkçe</span><span>العربية</span></div></div><p className="contact-privacy-note">{copy.contact.privacy}</p></div><div className="contact-form-wrap"><h2 className="contact-form-heading">{copy.contact.formLabel}</h2><ContactForm locale={locale} /></div></div></section></>;
 }

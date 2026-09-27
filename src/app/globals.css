@@ -248,6 +248,15 @@ a:hover .arrow { transform: translate(2px, -2px); }
 .contact-aside-mark { color: var(--accent); font-size: 25px; }
 .contact-aside h2 { max-width: 370px; margin: 16px 0 14px; color: var(--primary); font-size: 30px; }
 .contact-aside > p { max-width: 365px; color: var(--muted); font-size: 13px; line-height: 1.8; }
+.contact-actions { display: grid; justify-items: start; gap: 17px; margin-top: 25px; }
+.contact-whatsapp { min-height: 48px; }
+.contact-whatsapp svg { width: 19px; height: 19px; flex: 0 0 auto; }
+.contact-methods { display: grid; gap: 11px; }
+.contact-methods a { display: grid; justify-items: start; gap: 3px; color: var(--primary); text-align: start; }
+.contact-methods a > span { color: var(--muted); font-size: 10px; }
+.contact-methods bdi { max-width: 100%; color: var(--foreground); font-size: 12px; font-weight: 650; overflow-wrap: anywhere; }
+.contact-methods a:hover bdi { color: var(--secondary-strong); text-decoration: underline; text-underline-offset: 3px; }
+.contact-form-heading { margin: 0 0 14px; color: var(--primary); font-size: 19px; }
 .contact-languages { margin-top: 37px; padding-top: 20px; border-top: 1px solid var(--border); }
 .contact-languages .eyebrow { margin-bottom: 12px; }
 .contact-languages > div { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -325,7 +334,7 @@ select.field-control { cursor: pointer; }
   .cta-panel { min-height: 310px; margin-block: 50px; padding: 34px 22px; }.cta-content h2 { font-size: 32px; }.cta-content > p:not(.eyebrow) { font-size: 12px; }
   .page-hero { padding-top: 60px; }.page-hero h1 { font-size: 41px; }.page-hero-intro { font-size: 14px; }.page-hero-rule { flex-direction: column; gap: 5px; margin-top: 34px; font-size: 9px; }
   .feature-list, .supporting-list { grid-template-columns: 1fr; }.detail-solution-copy h2 { font-size: 24px; }.detail-solution-aside { padding: 11px; }.work-disclaimer { align-items: flex-start; }.work-disclaimer p { min-width: 100%; }
-  .about-statement { min-height: 230px; padding: 27px; }.about-statement p { font-size: 25px; }.contact-form { padding: 16px; }.form-grid { grid-template-columns: 1fr; gap: 14px; }.form-wide { grid-column: auto; }.form-submit-row { align-items: stretch; }.form-submit-row .button { width: 100%; }.form-consent { max-width: unset; }
+  .about-statement { min-height: 230px; padding: 27px; }.about-statement p { font-size: 25px; }.contact-form { padding: 16px; }.contact-whatsapp { width: 100%; justify-content: center; }.form-grid { grid-template-columns: 1fr; gap: 14px; }.form-wide { grid-column: auto; }.form-submit-row { align-items: stretch; }.form-submit-row .button { width: 100%; }.form-consent { max-width: unset; }
   .footer-main { grid-template-columns: 1fr; gap: 25px; }.footer-bottom { align-items: flex-start; flex-direction: column; justify-content: center; gap: 2px; padding-block: 12px; font-size: 11px; }
 }
 @media (prefers-reduced-motion: reduce) {

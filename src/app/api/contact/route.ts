@@ -3,6 +3,8 @@ import { checkContactRateLimit } from "@/lib/contact-rate-limit";
 
 export const runtime = "nodejs";
 const contactRecipient = "saifalomari244@gmail.com";
+const contactSender = "Dopixa <onboarding@resend.dev>";
+const optionalFields = new Set(["company", "phone", "budget", "locale"]);
 
 const limits: Record<string, number> = {
   name: 120, company: 120, businessType: 80, country: 100, email: 254, phone: 80,
@@ -11,19 +13,6 @@ const limits: Record<string, number> = {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
-}
-
-function validWebhook(raw: string) {
-  try {
-    const url = new URL(raw);
-    if (url.username || url.password || url.hash) return false;
-    if (process.env.NODE_ENV !== "development" && url.protocol !== "https:") return false;
-    if (["localhost", "127.0.0.1", "::1"].includes(url.hostname) || url.hostname.endsWith(".local")) return false;
-    if (/^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|169\.254\.)/.test(url.hostname)) return false;
-    return true;
-  } catch {
-    return false;
-  }
 }
 
 async function readBoundedJson(request: Request): Promise<unknown> {
@@ -75,28 +64,54 @@ export async function POST(request: Request) {
   const fields: Record<string, string> = {};
   for (const [key, limit] of Object.entries(limits)) {
     const value = body[key];
+    if (value === undefined && optionalFields.has(key)) {
+      fields[key] = "";
+      continue;
+    }
     if (typeof value !== "string" || value.length > limit) return NextResponse.json({ error: "Invalid request" }, { status: 400 });
     fields[key] = value.trim();
   }
-  if (!["tr", "ar"].includes(fields.locale) || !["tr", "ar"].includes(fields.preferredLanguage)) return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+  if ((fields.locale && !["tr", "ar"].includes(fields.locale)) || !["tr", "ar"].includes(fields.preferredLanguage)) return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   if (!["name", "businessType", "country", "email", "workflow", "improvement", "timeline"].every((key) => fields[key])) return NextResponse.json({ error: "Missing required field" }, { status: 400 });
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email)) return NextResponse.json({ error: "Invalid email" }, { status: 400 });
 
-  const webhook = process.env.CONTACT_WEBHOOK_URL;
-  const secret = process.env.CONTACT_WEBHOOK_SECRET;
-  if (!webhook || !secret || !validWebhook(webhook)) return NextResponse.json({ error: "Contact delivery is not configured" }, { status: 503 });
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+  if (!apiKey) return NextResponse.json({ ok: false, error: "Contact email is not configured", code: "EMAIL_NOT_CONFIGURED" }, { status: 503 });
+
+  const message = [fields.workflow, fields.improvement].filter(Boolean).join("\n\n");
+  const emailText = [
+    "New project enquiry from the Dopixa website",
+    "",
+    `Name: ${fields.name}`,
+    `Company: ${fields.company || "Not provided"}`,
+    `Email: ${fields.email}`,
+    `Phone / WhatsApp: ${fields.phone || "Not provided"}`,
+    `Project type: ${fields.businessType}`,
+    `Message:\n${message}`,
+    fields.locale ? `Locale: ${fields.locale}` : null,
+    `Country: ${fields.country}`,
+    `Preferred timeline: ${fields.timeline}`,
+    `Budget: ${fields.budget || "Not provided"}`,
+    `Preferred language: ${fields.preferredLanguage}`,
+  ].filter((line): line is string => line !== null).join("\n");
 
   try {
-    const upstream = await fetch(webhook, {
+    const upstream = await fetch("https://api.resend.com/emails", {
       method: "POST",
-      headers: { "content-type": "application/json", authorization: `Bearer ${secret}` },
-      body: JSON.stringify({ ...fields, recipientEmail: contactRecipient }),
+      headers: { "content-type": "application/json", authorization: `Bearer ${apiKey}` },
+      body: JSON.stringify({
+        from: contactSender,
+        to: [contactRecipient],
+        reply_to: fields.email,
+        subject: "New Dopixa project enquiry",
+        text: emailText,
+      }),
       cache: "no-store",
       signal: AbortSignal.timeout(8000),
     });
-    if (!upstream.ok) return NextResponse.json({ error: "Contact delivery failed" }, { status: 502 });
-    return NextResponse.json({ ok: true }, { status: 200 });
+    if (!upstream.ok) return NextResponse.json({ ok: false, error: "Email delivery failed", code: "EMAIL_DELIVERY_FAILED" }, { status: 502 });
+    return NextResponse.json({ ok: true, message: "Contact request sent" }, { status: 200 });
   } catch {
-    return NextResponse.json({ error: "Contact delivery failed" }, { status: 502 });
+    return NextResponse.json({ ok: false, error: "Email delivery failed", code: "EMAIL_DELIVERY_FAILED" }, { status: 502 });
   }
 }

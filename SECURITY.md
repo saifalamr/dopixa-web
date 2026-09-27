@@ -1,7 +1,7 @@
 # Security Baseline
 
-- Keep webhook credentials, hosting tokens, and all future privileged keys in server-side environment variables. `.env*` files are ignored except the committed `.env.example`, which contains variable names and blank safe values only.
-- The contact API accepts bounded JSON only, validates required fields and lengths, checks browser origin when supplied, rejects unsafe webhook URLs, uses a timeout, and does not persist submissions. It never logs contact contents. Contact delivery forwards the validated submission and a server-defined recipient address to the configured webhook; delivery credentials remain server-side.
+- Keep the Resend API key and all future privileged keys in server-side environment variables. `RESEND_API_KEY` must never use the `NEXT_PUBLIC_` prefix. `.env*` files are ignored except the committed `.env.example`, which contains variable names and blank safe values only.
+- The contact API accepts bounded JSON only, validates required fields and lengths, checks browser origin when supplied, uses a timeout, and does not persist submissions. It sends a plain-text email to the fixed Dopixa contact address through Resend, sets the validated submitter address as reply-to, and never logs contact contents or returns provider error details.
 - The endpoint combines a hidden honeypot with a process-local limit of five requests per client address per ten minutes. This provides a modest baseline without a new service; it resets on process restart and is not shared across serverless instances. Add hosting-edge protection before relying on it for sustained public traffic.
 - Use separate preview, staging, and production secrets. Restrict webhook credentials to the minimum needed; rotate them if exposed.
 - Keep dependencies locked, review automated dependency/security alerts, and run `npm audit` before releases. No production/client data, credentials, or private case-study assets belong in this repository.

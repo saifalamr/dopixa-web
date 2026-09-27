@@ -23,7 +23,7 @@ npm run build
 
 ## Environment
 
-Copy `.env.example` to `.env.local` for local configuration. Set `NEXT_PUBLIC_SITE_URL` to the verified canonical site origin in each deployed environment. Contact delivery remains disabled until the server-only `CONTACT_WEBHOOK_URL` and `CONTACT_WEBHOOK_SECRET` values are configured. The webhook must accept the documented JSON payload and return a 2xx response; never expose these values to browser code.
+Copy `.env.example` to `.env.local` for local configuration. Set `NEXT_PUBLIC_SITE_URL` to the verified canonical site origin and configure `RESEND_API_KEY` as a server-only environment variable in each deployed environment. The contact form sends plain-text submissions to the Dopixa contact address through Resend. The API key is used only by the server route and must never be prefixed with `NEXT_PUBLIC_`. Before production, replace the Resend test sender in `src/app/api/contact/route.ts` with an address on a verified sending domain.
 
 ## Architecture and operations
 

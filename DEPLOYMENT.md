@@ -12,7 +12,7 @@ Vercel is the recommended first host for its native Next.js support. GitHub Acti
 ## Required before first public launch
 
 - Confirm and verify the Dopixa production domain; set `NEXT_PUBLIC_SITE_URL` to its canonical HTTPS origin. Canonical links and sitemap URLs stay omitted until this is configured.
-- Set `RESEND_API_KEY` as a server-side secret in each Vercel environment. Do not expose it through a `NEXT_PUBLIC_` variable. Contact submissions are sent to `saifalomari244@gmail.com`; test success, provider failure, timeout, bad input, cross-origin requests, and edge rate limiting.
+- Set `RESEND_API_KEY` as a server-side secret in each Vercel environment. Do not expose it through a `NEXT_PUBLIC_` variable. Contact submissions are sent to `saifalomari244@gmail.com`; test success, provider failure, timeout, bad input, cross-origin requests, and rate limiting. The current rate limit is process-local and is not shared across serverless instances.
 - Before launch, replace the development sender `onboarding@resend.dev` in the contact route with an address on a domain verified in Resend. Review Resend's data retention, access controls, and processing terms for Turkish and Arabic-speaking customer enquiries.
 - Add domain DNS, TLS, monitoring, and an owner for incident response. Validate redirects, canonical/hreflang URLs, sitemap, robots, and structured data on the deployed domain.
 - Review accessibility and the public status/permissions of each case study. Prepared cards are not claims that a project is live or endorsed by its client.

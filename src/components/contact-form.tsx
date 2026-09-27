@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Link from "next/link";
 import { getCopy, type Locale } from "@/lib/content";
 
 const controlClass = "field-control";
@@ -66,7 +67,7 @@ export function ContactForm({ locale }: { locale: Locale }) {
       {select("timeline", copy.fields.timeline, copy.options.timeline)}{input("budget", copy.fields.budget, false)}
       <label className="form-field"><span>{copy.fields.language}<span className="required-mark" aria-hidden="true"> *</span></span><select name="preferredLanguage" required defaultValue={locale} className={controlClass}><option value="tr">Türkçe</option><option value="ar">العربية</option></select></label>
     </div>
-    <div className="form-submit-row"><div className="form-consent"><span className="privacy-lock" aria-hidden="true">◇</span><p>{copy.privacy}</p></div><button className="button button-primary" type="submit" disabled={status === "sending"}>{status === "sending" ? copy.sending : copy.submit}<span aria-hidden="true">↗</span></button></div>
+    <div className="form-submit-row"><div className="form-consent"><span className="privacy-lock" aria-hidden="true">◇</span><p>{copy.privacy} <Link href={`/${locale}/privacy`}>{getCopy(locale).footer.privacy}</Link></p></div><button className="button button-primary" type="submit" disabled={status === "sending"}>{status === "sending" ? copy.sending : copy.submit}<span aria-hidden="true">↗</span></button></div>
     <p className={`form-status ${status === "error" ? "is-error" : status === "success" ? "is-success" : ""}`} role="status" aria-live="polite">{status === "error" ? copy.error : status === "success" ? copy.success : ""}</p>
   </form>;
 }

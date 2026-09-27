@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Noto_Sans_Arabic, Plus_Jakarta_Sans } from "next/font/google";
 import { notFound } from "next/navigation";
 import { SiteFooter, SiteHeader } from "@/components/site-shell";
@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   openGraph: { type: "website", siteName: "Dopixa" },
   twitter: { card: "summary_large_image" },
 };
+
+export const viewport: Viewport = { themeColor: "#FAF7F2", colorScheme: "light" };
 
 export function generateStaticParams() { return locales.map((locale) => ({ locale })); }
 

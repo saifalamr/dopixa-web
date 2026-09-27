@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ContactForm } from "@/components/contact-form";
 import { getCaseStudies } from "@/lib/case-studies";
 import { getCopy, type Locale, type PageKey } from "@/lib/content";
+import { getLegalDocument } from "@/lib/legal-content";
 
 function Arrow({ className = "" }: { className?: string }) { return <span className={`arrow ${className}`} aria-hidden="true">↗</span>; }
 function SectionHeading({ eyebrow, title, text }: { eyebrow?: string; title: string; text?: string }) {
@@ -43,7 +44,23 @@ export function SitePage({ locale, page }: { locale: Locale; page?: PageKey }) {
     case "process": return <Process locale={locale} />;
     case "about": return <About locale={locale} />;
     case "contact": return <Contact locale={locale} />;
+    case "privacy": return <LegalPage locale={locale} page="privacy" />;
+    case "terms": return <LegalPage locale={locale} page="terms" />;
   }
+}
+
+function LegalPage({ locale, page }: { locale: Locale; page: "privacy" | "terms" }) {
+  const copy = getCopy(locale);
+  const document = getLegalDocument(locale, page);
+  return <>
+    <PageHero locale={locale} eyebrow={page === "privacy" ? copy.footer.privacy : copy.footer.terms} title={copy.pageTitles[page]} intro={copy.pageIntros[page]} />
+    <section className="section legal-section"><div className="container legal-document">
+      <p className="legal-updated">{locale === "tr" ? "Son güncelleme" : "آخر تحديث"}: <time dateTime="2026-09-27">{document.updated}</time></p>
+      {document.sections.map((section) => <section className="legal-copy-section" key={section.title}><h2>{section.title}</h2>{section.paragraphs.map((paragraph) => <p dir="auto" key={paragraph}>{paragraph}</p>)}{section.bullets && <ul>{section.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul>}</section>)}
+      {page === "privacy" && <p className="privacy-provider-links">{locale === "tr" ? "Hizmet sağlayıcıların gizlilik açıklamaları:" : "إشعارات الخصوصية لدى مزوّدي الخدمة:"} <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">Resend</a> · <a href="https://vercel.com/legal/privacy-notice" target="_blank" rel="noopener noreferrer">Vercel</a></p>}
+      <p className="legal-contact">{locale === "tr" ? "Sorularınız için" : "للاستفسارات"} <a href="mailto:saifalomari244@gmail.com"><bdi dir="ltr">saifalomari244@gmail.com</bdi></a></p>
+    </div></section>
+  </>;
 }
 
 function Home({ locale }: { locale: Locale }) {

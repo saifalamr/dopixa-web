@@ -3,11 +3,11 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { Locale, PageKey } from "@/lib/content";
+import type { Locale, NavPageKey } from "@/lib/content";
 
-const paths: Record<PageKey, string> = { solutions: "solutions", work: "work", process: "process", about: "about", contact: "contact" };
+const paths: Record<NavPageKey, string> = { solutions: "solutions", work: "work", process: "process", about: "about", contact: "contact" };
 
-export function MobileMenu({ locale, links, contactLabel }: { locale: Locale; links: Array<{ key: PageKey; label: string }>; contactLabel: string }) {
+export function MobileMenu({ locale, links, contactLabel }: { locale: Locale; links: Array<{ key: NavPageKey; label: string }>; contactLabel: string }) {
   const pathname = usePathname();
   const menu = useRef<HTMLDetailsElement>(null);
   useEffect(() => { menu.current?.removeAttribute("open"); }, [pathname]);
